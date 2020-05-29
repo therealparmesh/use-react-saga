@@ -4,8 +4,8 @@ import { effectTypes } from 'redux-saga/effects';
 
 export const useReactSaga = ({ state, dispatch, saga }) => {
   const environment = React.useRef({
-    channel: stdChannel(),
     state,
+    channel: stdChannel(),
     actions: [],
   });
 
@@ -35,9 +35,9 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
   React.useEffect(() => {
     const task = runSaga(
       {
-        channel: environment.current.channel,
         getState: () => environment.current.state,
         dispatch: put,
+        channel: environment.current.channel,
         effectMiddlewares: [
           (runEffect) => (effect) => {
             if (effect.type === effectTypes.SELECT) {
