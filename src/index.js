@@ -2,16 +2,9 @@ import React from 'react';
 import { stdChannel, runSaga } from 'redux-saga';
 import { take, call, effectTypes } from 'redux-saga/effects';
 
-const REACT_STATE_READY = '@@REACT_STATE_READY';
+const NEXT_STATE = '@@NEXT_STATE';
 
-function* selectAsync(selector, args) {
-  const { state } = yield take(REACT_STATE_READY);
-  const selected = yield call(selector, state, ...args);
-
-  return selected;
-}
-
-export function useReactSaga({ state, dispatch, saga }) {
+export const useReactSaga = ({ state, dispatch, saga }) => {
   const environment = React.useRef({
     channel: stdChannel(),
     state,
@@ -38,7 +31,7 @@ export function useReactSaga({ state, dispatch, saga }) {
 
       actions.forEach((action) => environment.current.channel.put(action));
       environment.current.channel.put({
-        type: REACT_STATE_READY,
+        type: NEXT_STATE,
         state,
       });
     }
@@ -48,28 +41,30 @@ export function useReactSaga({ state, dispatch, saga }) {
     const task = runSaga(
       {
         channel: environment.current.channel,
-        getState: () => {},
         dispatch: put,
         effectMiddlewares: [
           (runEffect) => (effect) =>
-            effect.type === effectTypes.SELECT
-              ? runEffect(
-                  call(
-                    selectAsync,
+            runEffect(
+              effect.type === effectTypes.SELECT
+                ? call(
+                    function* (selector, args) {
+                      const { state } = yield take(NEXT_STATE);
+                      const selected = yield call(selector, state, ...args);
+
+                      return selected;
+                    },
                     effect.payload.selector,
                     effect.payload.args,
-                  ),
-                )
-              : runEffect(effect),
+                  )
+                : effect,
+            ),
         ],
       },
       saga,
     );
 
-    return () => {
-      task.cancel();
-    };
+    return () => task.cancel();
   }, [put, saga]);
 
   return put;
-}
+};
