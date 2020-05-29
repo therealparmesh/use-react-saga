@@ -1,8 +1,6 @@
 import React from 'react';
 import { stdChannel, runSaga } from 'redux-saga';
-import { take, call, effectTypes } from 'redux-saga/effects';
-
-const NEXT_STATE = '@@NEXT_STATE';
+import { effectTypes } from 'redux-saga/effects';
 
 export const useReactSaga = ({ state, dispatch, saga }) => {
   const environment = React.useRef({
@@ -30,10 +28,7 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
       environment.current.actions = [];
 
       actions.forEach((action) => environment.current.channel.put(action));
-      environment.current.channel.put({
-        type: NEXT_STATE,
-        state,
-      });
+      environment.current.channel.put({});
     }
   });
 
@@ -41,23 +36,16 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
     const task = runSaga(
       {
         channel: environment.current.channel,
+        getState: () => environment.current.state,
         dispatch: put,
         effectMiddlewares: [
-          (runEffect) => (effect) =>
-            runEffect(
-              effect.type === effectTypes.SELECT
-                ? call(
-                    function* (selector, args) {
-                      const { state } = yield take(NEXT_STATE);
-                      const selected = yield call(selector, state, ...args);
-
-                      return selected;
-                    },
-                    effect.payload.selector,
-                    effect.payload.args,
-                  )
-                : effect,
-            ),
+          (runEffect) => (effect) => {
+            if (effect.type === effectTypes.SELECT) {
+              environment.current.channel.take(() => runEffect(effect));
+            } else {
+              runEffect(effect);
+            }
+          },
         ],
       },
       saga,
