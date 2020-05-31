@@ -1,21 +1,24 @@
 import React from 'react';
 import { stdChannel, runSaga } from 'redux-saga';
-import { effectTypes } from 'redux-saga/effects';
+import { take, call, effectTypes } from 'redux-saga/effects';
+
+const STATE_READY = '@@STATE_READY';
 
 export const useReactSaga = ({ state, dispatch, saga }) => {
   const environment = React.useRef({
     state,
     channel: stdChannel(),
     actions: [],
+    stateChangePossible: false,
   });
 
   const [_, forceUpdate] = React.useState({});
 
   const put = React.useCallback(
     (action) => {
+      forceUpdate({});
       dispatch(action);
       environment.current.actions.push(action);
-      forceUpdate({});
     },
     [dispatch],
   );
@@ -28,7 +31,12 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
       environment.current.actions = [];
 
       actions.forEach((action) => environment.current.channel.put(action));
-      environment.current.channel.put({});
+      environment.current.channel.put({
+        type: STATE_READY,
+        payload: state,
+      });
+
+      environment.current.stateChangePossible = false;
     }
   });
 
@@ -40,11 +48,29 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
         channel: environment.current.channel,
         effectMiddlewares: [
           (runEffect) => (effect) => {
-            if (effect.type === effectTypes.SELECT) {
-              environment.current.channel.take(() => runEffect(effect));
-            } else {
-              runEffect(effect);
+            const stateChangePossible = environment.current.stateChangePossible;
+
+            if (effect.type === effectTypes.PUT) {
+              environment.current.stateChangePossible = true;
             }
+
+            if (effect.type === effectTypes.SELECT && stateChangePossible) {
+              environment.current.stateChangePossible = false;
+
+              return runEffect(
+                call(
+                  function* (selector, args) {
+                    const action = yield take(STATE_READY);
+
+                    return yield call(selector, action.payload, ...args);
+                  },
+                  effect.payload.selector,
+                  effect.payload.args,
+                ),
+              );
+            }
+
+            return runEffect(effect);
           },
         ],
       },
