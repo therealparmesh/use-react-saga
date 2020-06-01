@@ -20,7 +20,7 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
       dispatch(action);
       environment.current.actions.push(action);
     },
-    [dispatch],
+    [],
   );
 
   React.useEffect(() => {
@@ -78,7 +78,7 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
     );
 
     return () => task.cancel();
-  }, [put, saga]);
+  }, []);
 
   return put;
 };
