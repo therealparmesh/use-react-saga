@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/therealparmesh/use-react-saga/compare/v0.0.5...v0.0.6) (2020-06-01)
+
+
+### Bug Fixes
+
+* allow props to be created inline ([8da4c81](https://github.com/therealparmesh/use-react-saga/commit/8da4c815e5e225741f68dac68bb6ab31170c266a))
+
 ### [0.0.5](https://github.com/therealparmesh/use-react-saga/compare/v0.0.4...v0.0.5) (2020-05-31)
 
 
