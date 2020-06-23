@@ -14,14 +14,11 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
 
   const [_, forceUpdate] = React.useState({});
 
-  const put = React.useCallback(
-    (action) => {
-      forceUpdate({});
-      dispatch(action);
-      environment.current.actions.push(action);
-    },
-    [],
-  );
+  const put = React.useCallback((action) => {
+    dispatch(action);
+    environment.current.actions.push(action);
+    forceUpdate({});
+  }, []);
 
   React.useEffect(() => {
     environment.current.state = state;
