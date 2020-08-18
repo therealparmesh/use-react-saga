@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/therealparmesh/use-react-saga/compare/v0.0.7...v0.0.8) (2020-08-18)
+
+### Bug Fixes
+
+- update effect initialization order ([c4b92af](https://github.com/therealparmesh/use-react-saga/commit/c4b92af6321c9ac927da0ff3141d6bb9f8fcf909))
+
 ### [0.0.7](https://github.com/therealparmesh/use-react-saga/compare/v0.0.6...v0.0.7) (2020-06-23)
 
 ### Bug Fixes
