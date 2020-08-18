@@ -21,23 +21,6 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
   }, []);
 
   React.useEffect(() => {
-    environment.current.state = state;
-
-    if (environment.current.actions.length > 0) {
-      const actions = environment.current.actions;
-      environment.current.actions = [];
-
-      actions.forEach((action) => environment.current.channel.put(action));
-      environment.current.channel.put({
-        type: STATE_READY,
-        payload: state,
-      });
-
-      environment.current.stateChangePossible = false;
-    }
-  });
-
-  React.useEffect(() => {
     const task = runSaga(
       {
         getState: () => environment.current.state,
@@ -76,6 +59,23 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
 
     return () => task.cancel();
   }, []);
+
+  React.useEffect(() => {
+    environment.current.state = state;
+
+    if (environment.current.actions.length > 0) {
+      const actions = environment.current.actions;
+      environment.current.actions = [];
+
+      actions.forEach((action) => environment.current.channel.put(action));
+      environment.current.channel.put({
+        type: STATE_READY,
+        payload: state,
+      });
+
+      environment.current.stateChangePossible = false;
+    }
+  });
 
   return put;
 };
