@@ -10,7 +10,6 @@
     "types.d.ts"
   ],
   "type": "module",
-  "sideEffects": false,
   "main": "./src/index.js",
   "types": "./types.d.ts",
   "exports": {
