@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/therealparmesh/use-react-saga/compare/v0.0.10...v0.1.0) (2026-07-11)
+
+### ⚠ BREAKING CHANGES
+
+- the package is now ESM only and requires Redux Saga 1.5 or newer.
+
+### Bug Fixes
+
+- keep saga dispatch current and improve declarations ([455234b](https://github.com/therealparmesh/use-react-saga/commit/455234b629cd171bc7ab3153ae5e0bcb918e562c))
+
+- migrate package tooling to Bun ([bf49c79](https://github.com/therealparmesh/use-react-saga/commit/bf49c7944e281ebca98cedf77ce5b6a0bf6ea8c1))
+
 ### [0.0.10](https://github.com/therealparmesh/use-react-saga/compare/v0.0.9...v0.0.10) (2021-11-24)
 
 ### [0.0.9](https://github.com/therealparmesh/use-react-saga/compare/v0.0.8...v0.0.9) (2021-11-24)
