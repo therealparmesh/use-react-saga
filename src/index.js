@@ -1,8 +1,8 @@
-import React from 'react';
-import { stdChannel, runSaga } from 'redux-saga';
-import { take, call, effectTypes } from 'redux-saga/effects';
+import React from "react";
+import { stdChannel, runSaga } from "redux-saga";
+import { take, call, effectTypes } from "redux-saga/effects";
 
-const STATE_READY = '@@STATE_READY';
+const STATE_READY = "@@STATE_READY";
 
 export const useReactSaga = ({ state, dispatch, saga }) => {
   const environment = React.useRef({
@@ -10,12 +10,15 @@ export const useReactSaga = ({ state, dispatch, saga }) => {
     channel: stdChannel(),
     actions: [],
     stateChangePossible: false,
+    dispatch,
   });
+
+  environment.current.dispatch = dispatch;
 
   const [_, forceUpdate] = React.useState({});
 
   const put = React.useCallback((action) => {
-    dispatch(action);
+    environment.current.dispatch(action);
     environment.current.actions.push(action);
     forceUpdate({});
   }, []);
