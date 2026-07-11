@@ -1,6 +1,6 @@
 {
   "name": "use-react-saga",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Run a Redux Saga from a React hook without a Redux store.",
   "license": "MIT",
   "author": "Parmesh Krishen",

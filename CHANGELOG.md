@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/therealparmesh/use-react-saga/compare/v0.1.0...v0.1.1) (2026-07-11)
+
+### Bug Fixes
+
+- remove side effects metadata ([fd6a17b](https://github.com/therealparmesh/use-react-saga/commit/fd6a17b867baa7024a821c4753f2e2a11ef4fb45))
+
 ## [0.1.0](https://github.com/therealparmesh/use-react-saga/compare/v0.0.10...v0.1.0) (2026-07-11)
 
 ### ⚠ BREAKING CHANGES
